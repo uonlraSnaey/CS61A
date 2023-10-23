@@ -1,0 +1,155 @@
+{
+  "main": {
+    "id": "f2096b4de57ecb3c",
+    "type": "split",
+    "children": [
+      {
+        "id": "f2e3ef870236ee3b",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "5e0e410aec57e3db",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "notes/lecture 1 Overviwe and intro to Imaging.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "fc6b1ff7de0f0d45",
+    "type": "split",
+    "children": [
+      {
+        "id": "05d0143c7dce481b",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "0eaf2e0989ec0682",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "8689b83f280739e5",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "44b9bc3d093ccb64",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 200,
+    "collapsed": true
+  },
+  "right": {
+    "id": "f52ef6654c7b3138",
+    "type": "split",
+    "children": [
+      {
+        "id": "5a79813eb9d80a7b",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "ad7d303807fe05b7",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "notes/lecture 1 Overviwe and intro to Imaging.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "7089e9667089c769",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "notes/lecture 1 Overviwe and intro to Imaging.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "4cbf74d508ef4d57",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "dc117b9fa1cc660d",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "notes/lecture 1 Overviwe and intro to Imaging.md"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:打开快速切换": false,
+      "graph:查看关系图谱": false,
+      "canvas:新建白板": false,
+      "daily-notes:打开/创建今天的日记": false,
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false
+    }
+  },
+  "active": "5e0e410aec57e3db",
+  "lastOpenFiles": [
+    "notes/lecture 1 Overviwe and intro to Imaging.md",
+    "notes"
+  ]
+}
