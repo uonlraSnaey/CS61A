@@ -1,5 +1,6 @@
 from operator import add, sub
 
+
 def a_plus_abs_b(a, b):
     """Return a+abs(b), but without calling abs.
 
@@ -17,6 +18,7 @@ def a_plus_abs_b(a, b):
     else:
         f = lambda x, y: x + y
     return f(a, b)
+
 
 def a_plus_abs_b_syntax_check():
     """Check that you didn't change the return statement of a_plus_abs_b.
@@ -42,7 +44,8 @@ def two_of_three(i, j, k):
     >>> two_of_three(5, 5, 5)
     50
     """
-    return min(i, j, k)**2 + sorted([i, j, k])[1]**2
+    return pow(min(i, j, k), 2) + pow(sorted([i, j, k])[1], 2)
+
 
 def two_of_three_syntax_check():
     """Check that your two_of_three code consists of nothing but a return statement.
@@ -73,7 +76,7 @@ def largest_factor(n):
 
     if division_n_list == []:
         return 1
-    
+
     return max(division_n_list)
 
 
@@ -97,14 +100,14 @@ def hailstone(n):
     1
     """
     "*** YOUR CODE HERE ***"
-    length = 1  
+    length = 1
     while n != 1:
         print(n)
         if n % 2 == 0:
             n = n // 2
         else:
             n = 3 * n + 1
-        length += 1  
+        length += 1
 
-    print(n)  
+    print(n)
     return length
