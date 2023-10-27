@@ -55,7 +55,7 @@ def free_bacon(score):
 # 根据选择投掷的次数(roll_nums)计算所得的分数
 def take_turn(num_rolls, opponent_score, dice=six_sided):
     """Simulate a turn rolling NUM_ROLLS dice, which may be 0 (Free Bacon).
-    Return the points scored for the turn by the current player.
+    Return the points scored for the turn byjj: the current player.
 
     num_rolls:       The number of dice rolls that will be made.
     opponent_score:  The total score of the opponent.
@@ -419,17 +419,43 @@ def swap_strategy(score, opponent_score, cutoff=8, num_rolls=6):
     non-beneficial swap. Otherwise, it rolls NUM_ROLLS.
     """
     # BEGIN PROBLEM 11
-    
+    score_simulate = free_bacon(opponent_score)
+    if is_swap(score_simulate + score, opponent_score):
+        if score_simulate + score >= opponent_score:
+            return num_rolls
+        else:
+            return 0
+    else:
+        if score_simulate >= cutoff:
+            return 0
+        else:
+            return num_rolls
     # END PROBLEM 11
 
 
-def final_strategy(score, opponent_score):
+def final_strategy(score, opponent_score, cutoff=4, num_rolls=6):
     """Write a brief description of your final strategy.
 
     *** YOUR DESCRIPTION HERE ***
     """
     # BEGIN PROBLEM 12
-    return 6  # Replace this statement
+    simu_score = free_bacon(opponent_score)
+
+    if is_swap(score, opponent_score) and opponent_score - score > cutoff:
+        return 0
+    
+    if is_swap(score + simu_score, opponent_score):
+        if simu_score + score >= cutoff:
+            return num_rolls
+        else:
+            return 0
+    else:
+        if opponent_score >= cutoff:
+            return 0
+        else:
+            return num_rolls
+            
+
     # END PROBLEM 12
 
 ##########################
