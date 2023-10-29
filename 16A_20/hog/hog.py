@@ -23,14 +23,13 @@ def roll_dice(num_rolls, dice=six_sided):
     # BEGIN PROBLEM 1
     "*** YOUR CODE HERE ***"
     total_score = 0
-    sad = False
-
+    pig_out = False
     for _ in range(num_rolls):
-        roll_number = dice()
-        total_score += roll_score
-        if roll_number == 1:
-            sad = True
-     if sad:
+        score = dice()
+        total_score += score
+        if score == 1:
+            pig_out = True
+    if pig_out:
         return 1
     else:
         return total_score
