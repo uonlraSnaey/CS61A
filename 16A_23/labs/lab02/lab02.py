@@ -11,12 +11,11 @@ def lambda_curry2(func):
     >>> mul_5 = curried_mul(5)
     >>> mul_5(42)
     210
-    >>> lambda_curry2(mod)(123)(10)
+    >>> lambda_curry2(mod)(123)(10) # func: mdd 123: x. 10: y
     3
     """
     "*** YOUR CODE HERE ***"
-    return ______
-
+    return lambda x: lambda y: func(x, y)
 
 
 def count_cond(condition):
@@ -47,7 +46,14 @@ def count_cond(condition):
     8
     """
     "*** YOUR CODE HERE ***"
-
+    def count(n):
+        i, c = 1, 0
+        while i <= n:
+            if condition(n, i):
+                c += 1
+            i += 1
+        return c
+    return count
 
 
 def both_paths(sofar="S"):
@@ -62,8 +68,15 @@ def both_paths(sofar="S"):
     SUU
     """
     "*** YOUR CODE HERE ***"
+    print(sofar)
 
+    def up():
+        return both_paths(sofar + 'U')
 
+    def down():
+        return both_paths(sofar + 'D')
+
+    return up, down
 
 def compose1(f, g):
     """Return the composition function which given x, computes f(g(x)).
@@ -97,7 +110,7 @@ def composite_identity(f, g):
     False
     """
     "*** YOUR CODE HERE ***"
-
+    return lambda x: compose1(f, g)(x) == compose1(g, f)(x)
 
 
 def cycle(f1, f2, f3):
@@ -127,4 +140,19 @@ def cycle(f1, f2, f3):
     19
     """
     "*** YOUR CODE HERE ***"
+    def operation(n):
+        def func(x):
+            a = n // 3
+            b = n % 3
 
+            for _ in range(a):
+                x = f3(f2(f1(x)))
+            if b == 0:
+                return x
+            elif b == 1:
+                return f1(x)
+            else:
+                return f2(f1(x))
+
+        return func
+    return operation
