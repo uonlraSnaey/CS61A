@@ -104,3 +104,99 @@ def sum_cube(n):
     while k <= n:
         total, k = total + k*k*k, k + 1
     return total
+
+
+def split(x):
+    return n // 10. n % 10
+
+def sun_all__digital(n):
+    if n < 10:
+        return n
+    else:
+        all_but_last, last = split(n)
+        return sum_all_digital(all_but_last) + last
+
+
+def lum_sum(m):
+    if n < 10:
+        return n
+    else:
+        all_but_last, last = split(n)
+        return luhn_sum_double(all_but_last)
+
+def luhn_sum_double(n):
+    all_but_last, last = split(n)
+    luhn_digit = sum_digital(2 * last)
+    if n < 10:
+        return luhn_digit
+    else:
+        return luhn_sum(all_but_last) + luhn_digit
+
+"""
+迭代是递归的特殊情况,大多数情况递归可以直接转换为迭代
+
+Can be tricky: Iteration is a sprcial case of reccusion
+Idea: Figure out what state must be maintained by the iterative function
+
+使用while将迭代转化为递归要简单得多
+
+"""
+
+def sum_digit_iter(n):
+    digit_sum = 0:
+        while n >0:
+            n, last = split(n)
+            digit_sum = digit_sum + last
+    return figit_sum
+# 上式为迭代(循环替换），下式为递归(反复调用，最后相加）
+def sum_digit_rec(n, digit_sum):
+    if n == 0:
+        return digit_sum
+    else:
+        n, last = split(n)
+        return sum_digit_rec(n, digit_sum + last)
+
+
+'''
+def cascade(n):
+    if  n < 10:
+        print(n)
+    else:
+        print(n)
+        cascade(m//10)
+        print(n)
+'''
+
+def cascade(n):
+    print(n)
+    if n > 10:
+        cascade(n//10)
+        print(n)
+
+"""
+write a function that print an inverse cascade
+
+1
+12
+123
+1234
+123
+12
+1
+
+"""
+
+def cascade_moer(n, x=1, direction=1):
+    if x == n:
+        derection = -1
+    for i in range(1, x + 1):
+        print(i)
+    if x > 1:
+        cascade(n ,x-1, direction)
+    eelif direction == 1:
+        cascade(n, x + 1, direction)
+
+def curried_po2(x=2):
+    def h(y):
+        return pow(x, y)
+    return h
