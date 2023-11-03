@@ -10,8 +10,22 @@ def pascal(row, column):
     0
     >>> pascal(3, 2)	# Row 4 (1 3 3 1), 3rd entry
     3
+
+1
+1 1
+1 2 1
+1 3 3 1
+1 4 6 4 1
+
+
     """
     "*** YOUR CODE HERE ***"
+    if column == 0 or row == column:
+        return 1
+    if row < column:
+        return 0
+    else:
+        return pascal(row-1, column-1) + pascal(row-1,column)
 
 
 def compose1(f, g):
@@ -40,7 +54,9 @@ def repeated(f, n):
     True
     """
     "*** YOUR CODE HERE ***"
-
+    if n == 0:
+        return lambda x: x
+    return compose1(f, repeated(f, n-1))
 
 def num_eights(x):
     """Returns the number of times 8 appears as a digit of x.
@@ -64,6 +80,9 @@ def num_eights(x):
     True
     """
     "*** YOUR CODE HERE ***"
+    if x == 0:
+        return 0
+    return num_eights(x // 10) + (x % 10 == 8)
 
 
 def pingpong(n):
@@ -99,4 +118,14 @@ def pingpong(n):
     True
     """
     "*** YOUR CODE HERE ***"
+    def order(sequence, value, direction):
+        if sequence == n:
+            return value
+        if num_eights(sequence) != 0 or sequence % 8 == 0:
+            return order(sequence + 1, value - direction, -direction)
+        else:
+            return order(sequence + 1, value + direction, direction)
+
+    return order(1, 1, 1)
+
 
