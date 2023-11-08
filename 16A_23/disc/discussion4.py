@@ -40,3 +40,82 @@ def count_k(n, k):
 
     return count
 
+def flatten(s):
+    """Returns a flattened version of list s.
+
+    >>> flatten([1, 2, 3])
+    [1, 2, 3]
+    >>> deep = [1, [[2], 3], 4, [5, 6]]
+    >>> flatten(deep)
+    [1, 2, 3, 4, 5, 6]
+    >>> deep                                # input list is unchanged
+    [1, [[2], 3], 4, [5, 6]]
+    >>> very_deep = [['m', ['i', ['n', ['m', 'e', ['w', 't', ['a'], 't', 'i', 'o'], 'n']], 's']]]
+    >>> flatten(very_deep)
+    ['m', 'i', 'n', 'm', 'e', 'w', 't', 'a', 't', 'i', 'o', 'n', 's']
+    """
+    "*** YOUR CODE HERE ***"
+    lst = []
+    for element in s:
+        if type(element) == list:
+            lst += flatten(element)
+        else:
+            lst += [element]
+    return lst
+    
+"""    if s == 0：
+        return [] 
+    if type(s[0]) == list:
+        return flatten(s[0]) + flattne(s[1:])
+    else:
+        return [s[0] + flatten(s[1:])]"""
+
+
+def max_product(s):
+    """Return the maximum product that can be formed using
+    non-consecutive elements of s.
+    >>> max_product([10,3,1,9,2]) # 10 * 9
+    90
+    >>> max_product([5,10,5,10,5]) # 5 * 5 * 5
+    125
+    >>> max_product([])
+    1
+    """
+    if s == []:
+        return 1
+    if len(s) == 1:
+        return s[0]
+    else:
+        return max(s[0] * max_product(s[2:]), max_product(s[1:]))
+
+
+
+def paths(m, n):
+    """Return the number of paths from one corner of an
+    M by N grid to the opposite corner.
+
+    >>> paths(2, 2)
+    2
+    >>> paths(5, 7)
+    210
+    >>> paths(117, 1)
+    1
+    >>> paths(1, 157)
+    1
+    """
+    "*** YOUR CODE HERE ***"
+    assert m < 0 or  n < 0, 'n, m >=0'
+    
+    if m == 1 or n == 1:
+        return 1
+    else:
+        return paths(m-1, n) + paths(m, n-1)
+        
+    '''
+    if m == 1 amd n == 1:
+        return 1
+    elif m < 1 or n < 1:
+        return 0
+    else:
+        return paths(n-1, m) + paths(n, m-1)
+    '''
