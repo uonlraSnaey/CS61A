@@ -86,3 +86,47 @@ def print_parts(tree, partition=[]):
         print_parts(left, partition + [m])
         print_parts(right, partition)
         
+
+"""
+Q:
+Define the function add_trees, which takes in two trees and returns a new tree where each corresponding node from the first tree is added with the node from the second tree. If a node at any particular position is present in one tree but not the other, it should be present in the new tree as well.
+
+Hint: You may want to use the built-in zip function to iterate over multiple sequences at once.
+
+Note: If you feel that this one's a lot harder than the previous tree problems, that's totally fine! This is a pretty difficult problem, but you can do it! Talk about it with other students, and come back to it if you need to.
+"""
+def add_tree(t1, t2):
+    """   
+    Hint: You may want to use the built-in zip function to iterate over multiple sequences at once.
+    Note: If you feel that this one's a lot harder than the previous tree problems, that's totally fine! This is a pretty difficult problem, but you can do it! Talk about it with other students, and come back to it if you need to.
+    >>> number = tree(1,
+                    [tree(2,
+                        [tree(3),
+                        tree(4)],
+                    tree(5,
+                        [tree(6,
+                            [tree(7)]),
+                        tree(8)])])
+    >>> print_tree(add_trees(number, number))
+    2
+     4
+      6
+      8
+    10
+      12
+        14
+      16
+    """
+    if is_leaf(t1):
+        return tree(label(t1) + label(t2), branches(t1))
+    if is_tree(t2):
+        return tree(label(t1) + label(t2), branches(t2))
+    else:
+        fwer, more = sorted([branch(t1), branches(t2)], key=len)
+        
+        added_t1 = fwer + [tree(i) for i in range(len(more) - len(fwer))]
+        added_t2 = more
+
+        return tree(label + label(t2), [add_tree(a,b) for a, b in zip(added_t1, added_t2)])
+
+
