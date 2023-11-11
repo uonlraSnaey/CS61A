@@ -105,7 +105,11 @@ def balanced(m):
     True
     """
     "*** YOUR CODE HERE ***"
-
+    if is_planet(m):
+        return True
+    else:
+        left_en, right_len = end(left(m)), end(right(m))
+        return balanced(right_len) and balanced(left_en) and total_weight(left_en) * length(left(m)) == total_weight(right_len) * length(right(m))
 def totals_tree(m):
     """Return a tree representing the mobile with its total weight at the root.
 
@@ -136,7 +140,11 @@ def totals_tree(m):
     True
     """
     "*** YOUR CODE HERE ***"
-
+    if is_planet(m):
+        return tree(size(m))
+    else:
+        left_en, right_en = end(left(m)), end(right(m))
+        return tree(total_weight(m), [totals_tree(left_en), totals_tree(right_en)])
 
 def replace_leaf(t, find_value, replace_value):
     """Returns a new tree where every leaf value equal to find_value has
@@ -168,8 +176,10 @@ def replace_leaf(t, find_value, replace_value):
     True
     """
     "*** YOUR CODE HERE ***"
-
-
+    if is_leaf(t):
+        return tree(replace_value if find_value == label(t) else label(t))
+    else:
+        return tree(label(t), [replace_leaf(branch, find_value, replace_value) for branch in branches(t)])
 def preorder(t):
     """Return a list of the entries in this tree in the order that they
     would be visited by a preorder traversal (see problem description).
@@ -181,8 +191,7 @@ def preorder(t):
     [2, 4, 6]
     """
     "*** YOUR CODE HERE ***"
-
-
+    return [label(t)] + sum([preorder(branch) for branch in branches(t)], [])
 def has_path(t, phrase):
     """Return whether there is a path in a tree where the entries along the path
     spell out a particular phrase.
@@ -213,7 +222,10 @@ def has_path(t, phrase):
     """
     assert len(phrase) > 0, 'no path for empty phrases.'
     "*** YOUR CODE HERE ***"
-
+    if len(phrase) == 1:
+        return phrase[0] == label(t)
+    else:
+        return label(t) == phrase[0] and any([has_path(branch, phrase[1:]) for branch in branches(t)])
 
 def interval(a, b):
     """Construct an interval from a to b."""
@@ -222,10 +234,11 @@ def interval(a, b):
 def lower_bound(x):
     """Return the lower bound of interval x."""
     "*** YOUR CODE HERE ***"
-
+    return x[0]
 def upper_bound(x):
     """Return the upper bound of interval x."""
     "*** YOUR CODE HERE ***"
+    return x[1]
 def str_interval(x):
     """Return a string representation of interval x.
     """
@@ -251,13 +264,15 @@ def sub_interval(x, y):
     """Return the interval that contains the difference between any value in x
     and any value in y."""
     "*** YOUR CODE HERE ***"
-
+    return interval(lower_bound(x) - upper_bound(y), upper_bound(x) - lower_bound(y))
 
 def div_interval(x, y):
     """Return the interval that contains the quotient of any value in x divided by
     any value in y. Division is implemented as the multiplication of x by the
     reciprocal of y."""
     "*** YOUR CODE HERE ***"
+
+    assert(upper_bound(y) * lower_bound(y) > 0)
     reciprocal_y = interval(1/upper_bound(y), 1/lower_bound(y))
     return mul_interval(x, reciprocal_y)
 
@@ -276,7 +291,21 @@ def quadratic(x, a, b, c):
     '0 to 10'
     """
     "*** YOUR CODE HERE ***"
+    def func(t):
+        return a*t*t + b*t + c
 
+    x1, x2 = lower_bound(x), upper_bound(x)
+    f1, f2 = func(x1), func(x2)
+    s = -b/(2*a)
+    minu = func(s)
+
+    if x1 <= s <= x2:
+        if a > 0:
+            return interval(minu, max(f1, f2))
+        else:
+            return interval(min(f1, f2), minu)
+    else:
+        return interval(min(f1, f2), max(f1, f2))
 
 def par1(r1, r2):
     return div_interval(mul_interval(r1, r2), add_interval(r1, r2))
