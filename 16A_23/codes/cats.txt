@@ -1,0 +1,53 @@
+def accuracy(arg1, ar2)
+
+有两个输入，typed 和 reference 
+typed: 总输入的单词
+reference：正确的单词
+函数返回 typed / reference 的值 x 100（百分制且为小数）
+条件：
+1、如果输入的单词数 > 正确的单词数，函数返回0.0
+2、正常条件：统计正确单词数量 typed_words == reference_words
+
+
+def wpm(typed, elapsed)
+
+计算每分钟的打字速度
+tips:打字测试不会受到单词长度的影响:每分钟的字数并不是基于键入的单词数，而是基于字符数
+
+输入：
+typed: string 字符串而非单词数
+elapsed: 打字所花费的时间，秒
+
+每分钟字数的公式是输入的字符数(包括空格)除以5(典型的单词长度)与所用时间(以分钟为单位)的比率。注意 elapsed 是以 s 为单位。
+
+ 每分钟的字数计算使用2作为输入的字数(因为10 / 5 =       2)。如果有人在30秒(半分钟)内输入这个字符串，他们的速度将是每分钟4个字i(2/(1/2))
+
+def autocorrect(user_word, valid_words, diff_function, limit):
+
+条件： 
+1、如果参数 "user_word" 包含在"valid_words" 中，函数返回这个字母
+    
+2、 如果不存在这个词：函数返回在 valid_words 中与 user_word 差别最小的词，这一操作依据 解决diff_function 函数完成, 但是这个选出来的词y与 任何 valid_words 中的词的区别如果比 limit 大，就返回 user_word
+3、 diff_function 输入三个参数，两个 strig user_word 和 valid_words 来进行对比 , 还有limit
+
+tips:
+假设user_word和valid_words的所有元素都是小写的，并且没有标点符号。
+重要提示:如果多个字符 串 根 据 diff_function具有相同的最小差异，则自动更正应该返回valid_words中首先出现的字符串。
+    for w in valid_words:
+        if user_word == w:
+            return w
+        else:
+            if  user_word > limit or any(valid_words) > limit:
+                return user_word
+            else:
+                return diff_function(user_word, valid_words, limit)
+
+
+def shif_shifts(start, goal) 2 argments  "差异函数"
+
+返回 start 字符串转换为 goal 字符串所需的最小字符更改数，如果他们的长度不相等就将长度差异额外添加到总数中。:wpm
+tips:
+    各个单词的字母必须对应相等才行，而且这个函数返回的不同词及额外长度的总数量
+
+def meowstake_matches(start, goal) 计算将 start 字符串转换为 goal 字符串所需要的最小编辑数
+
