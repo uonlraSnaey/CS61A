@@ -1,0 +1,27 @@
+def make_adder_inc(a):
+    a: 整数
+    count: 调用次数
+    nonlocal a 
+    return fun(arg)
+        
+    func(b):
+        return a + b
+
+
+def insert_items(lst, entry, elem)
+    
+    lst: list
+    entry: argment
+    ele: argment
+
+    这个函数将检查list中存在的每一项，看它是否与entry相等
+    在找到一个相等的项后，这个函数将会修改列表，将elem放在找到的项的后面
+    在函数结束时，应该返回修改后的列表
+    
+    tips:
+        当 entry 和 elem 相等时，要避免在迭代过程中创建无限长的列表解决
+        对 lst 列表中元素创建索引来避免无限循环。
+        
+        index: lst中元素索引
+        size: lst 长度
+        while 循环判断 lst == entry ?

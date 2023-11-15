@@ -391,7 +391,6 @@ def memo(f):
         return cache[args]
     return memoized
 
-key_distance_diff = count(key_distance_diff)
 
 
 def faster_autocorrect(user_word, valid_words, diff_function, limit):
@@ -399,6 +398,22 @@ def faster_autocorrect(user_word, valid_words, diff_function, limit):
 
     # BEGIN PROBLEM EC2
     "*** YOUR CODE HERE ***"
+    """ OK 完全不会， 开摆！"""
+
+    index = tuple([user_word, tuple(valid_words), diff_function, limit])
+    if user_word in valid_words:
+        return user_word
+    if index in memo_for_far:
+        return memo_for_far[index]
+    else:
+        words_diff = [diff_function(user_word, w, limit) for w in valid_words]
+        similar_word, similar_diff = min(zip(valid_words, words_diff), key=lambda item: item[1])
+        if similar_diff > limit:
+            ret = user_word
+        else:
+            ret = similar_word
+        memo_for_far[index] = ret
+        return ret
     # END PROBLEM EC2
 
 
