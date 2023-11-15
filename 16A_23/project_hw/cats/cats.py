@@ -179,7 +179,8 @@ def meowstake_matches(start, goal, limit):
     elif len(start) == 0 or len(goal) == 0: # Feel free to remove or add additional cases
         # BEGIN
         "*** YOUR CODE HERE ***"
-        return 0
+        #return 0
+        return len(start) + len(goal)
         # END
     elif start[0] == goal[0]:
         return meowstake_matches(start[1:], goal[1:], limit)
@@ -207,8 +208,35 @@ def report_progress(typed, prompt, id, send):
     """Send a report of your id and progress so far to the multiplayer server."""
     # BEGIN PROBLEM 8
     "*** YOUR CODE HERE ***"
-    # END PROBLEM 8
+    """
+    len_t, len_p = len(typed), len(prompt)
+    assert len_t > len_p, 'typed is shorter than prompt'
+    count = 0 
+    for l in len_p:
+        if typed[i] != prompt[i]:
+            break
+        count += 1
+    correct_ratio = count / len_p
+    
+    send({'id': id, 'progress': correct_ratio})
+    return correct_ratio
+    """
+    """
+    什么时候我才能写出这样漂亮的代码qwq
+    """
 
+    correct_sofar = 0
+    for t, p in zip(typed, prompt):
+        if t == p:
+            correct_sofar += 1
+        else:
+            break
+    progress = correct_sofar / len(prompt)
+    send({'id': id, 'progress': progress})
+    return progress
+        
+
+    # END PROBLEM 8
 
 def fastest_words_report(times_per_player, words):
     """Return a text description of the fastest words typed by each player."""
@@ -233,6 +261,14 @@ def time_per_word(times_per_player, words):
     """
     # BEGIN PROBLEM 9
     "*** YOUR CODE HERE ***"
+    time_spend = []
+
+    for player in times_per_player: # 统计词数
+        time = []
+        for i in range(len(player) - 1):
+            time.append(player[i+1] - player[i])
+        time_spend.append(time)
+    return game(words, time_spend)
     # END PROBLEM 9
     
 
@@ -249,6 +285,31 @@ def fastest_words(game):
     words = range(len(all_words(game)))    # An index for each word
     # BEGIN PROBLEM 10
     "*** YOUR CODE HERE ***"
+    """
+    # words, times = game
+    words = all_words(game)
+    times = all_words(game)
+    fastest_w = [[] for _ in range(len(times))]
+    # 捏马马的不会了
+    for index, word in enumerate(words):
+        word_times = [times(player)[index] for player in range(len(times))]
+        word_index = min(range(len(times)), key=lambda x: word_times[x])
+        fastest_w[word_index].append(word)
+
+    return fastest_w
+
+    很烦WAW nmd cnm 把 338 行删了一行 还tm测半天
+    """
+    words = all_words(game)
+    times = all_times(game)
+    tot_player = len(times) 
+    fastest = [[] for i in range(tot_player)]
+    for i, word in enumerate(words):
+        word_times = [times[player][i] for player in range(tot_player)]
+        idx = min(range(tot_player), key=lambda x: word_times[x])
+        fastest[idx].append(word)
+    return fastest
+
     # END PROBLEM 10
 
 
@@ -275,7 +336,6 @@ def all_words(game):
 def all_times(game):
     """A selector function for all typing times for all players"""
     return game[1]
-
 
 def time(game, player_num, word_index):
     """A selector function for the time it took player_num to type the word at word_index"""
@@ -304,6 +364,21 @@ def key_distance_diff(start, goal, limit):
 
     # BEGIN PROBLEM EC1
     "*** YOUR CODE HERE ***"
+    """ 和 meowstake_matches 相似  区别是差值换成了键盘上字母的距离"""
+    if limit < 0:
+        return float("inf")
+    if len(goal) == 0 or len(start) == 0:
+        return len(goal) + len(start)
+    elif start[0] == goal[0]:
+        return key_distance_diff(start[1:], goal[1:], limit)
+    else:
+        add_diff = 1 + key_distance_diff(start, goal[1:], limit - 1) # 向 start 添加 比 goal 少的字母
+        del_diff = 1 + key_distance_diff(start[1:], goal, limit - 1)# 从 start 中删除 goal 中没有的字母
+        # start 和 goal 中对应的字母不相等
+        distance = key_distance[(start[0], goal[0])]
+        disorder_diff = distance + key_distance_diff(start[1:], goal[1:], limit - 1)
+
+        return min(min(add_diff, del_diff), disorder_diff)
     # END PROBLEM EC1
 
 def memo(f):

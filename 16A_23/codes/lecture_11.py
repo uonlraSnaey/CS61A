@@ -14,4 +14,22 @@ tips:
     对与给定的键，最多只能有一个对应的值
     
 """
+def withdraaw(balance):
+    def withdraaw(amount):
+        nonlocal balance
+        if amount > balance:
+            return 'Insufficient funds'
+        balance -= amount
+        return balance
+    return withdraaw
 
+# 抽象层次
+"""
+This is called the abstraction barrier!
+
+In fact, interacting within an ADT outside of its interface of constructors and selectors is called "violating the abstraction barrier" and is strongly discouraged (even when it doesn't produce an error).
+
+In this way, data abstraction mimics how we think about the world. For example, a car is a complicated machine, but it has a simple interface by which we interact with it: the wheel, the gas pedal, the gear shift. If you want to drive a car, you don't need to know how the engine was built or what kind of material the tires are made of. It's easy to drive a car because of the suppression of complexity that abstraction provides us.
+
+For the car, the principle of the abstraction barrier also applies. If we want to start the car, we should use the provided interface of turning the ignition key, rather than getting out, popping the hood, and messing around with the engine. While you could likely do that if you had enough knowledge, it is unnecessarily costly and highly dependent on how exactly the car was constructed. What are you going to do if the car is electric?
+"""

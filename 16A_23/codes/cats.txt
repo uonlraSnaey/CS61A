@@ -51,3 +51,38 @@ tips:
 
 def meowstake_matches(start, goal) 计算将 start 字符串转换为 goal 字符串所需要的最小编辑数
 
+def report_progress(typed, prompt[], id, send())
+
+计算进度情况： 正确键入的提示词中单词的比例，直到第一个错误单词出现为止，然后将这个给比例与提示中的总单词数相除
+tips: typed 单词数量只会小于prompt
+
+
+
+def time_per_word(time_per_player, a list about player time spend, words)
+
+return game: with giving information
+
+game:
+ data abstracion
+ 返回有一个关于 word 和 times 的列表 
+ return [word, time]
+    times: 每个玩家输入每个单词所需时间的列表的列表
+    times[i][j] : 玩家从 i 单词 到 j 单词所用的时间
+
+    [3,2,1] [4,2,3]
+
+
+
+def faster_words(game), 
+
+    return 每个玩家输入速度最快的单词列表。它返回一个列表的列表，其中每个子列表代表一个玩家，列表中包含他们输入速度最快的单词（与其他所有玩家相比
+    如果存在平局，考虑在列表中最早出现的玩家（最小的玩家索引）是最快输入该单词的玩家。
+
+一旦两个玩家都完成了输入，这个函数就会被调用
+通过 word_at 可以调用 game 中的 words
+word_at(game, word_index)
+您可以使用time 访问任何玩家键入任何单词所花费的时间。
+还需要考虑截至到某个单词所花费的总时间，并不是只考虑当单词所化的时间解决
+
+
+
