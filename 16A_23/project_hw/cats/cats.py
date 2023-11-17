@@ -399,7 +399,7 @@ def faster_autocorrect(user_word, valid_words, diff_function, limit):
     # BEGIN PROBLEM EC2
     "*** YOUR CODE HERE ***"
     """ OK 完全不会， 开摆！"""
-
+    memo_for_far = memo()
     index = tuple([user_word, tuple(valid_words), diff_function, limit])
     if user_word in valid_words:
         return user_word

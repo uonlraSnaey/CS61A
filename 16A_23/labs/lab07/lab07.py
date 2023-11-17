@@ -119,7 +119,15 @@ def reverse(lst):
     [-8, 72, 42]
     """
     "*** YOUR CODE HERE ***"
+    first, end = 0, len(lst) - 1
 
+    while first < end:
+        lst[first], lst[end] = lst[end], lst[first]
+        first += 1
+        end -= 1
+        
+        """?"""
+        print("DEBUG:swp", lst[first], lst[end])
 
 cs61a = {
     "Homework": 2,
@@ -147,7 +155,13 @@ def make_glookup(class_assignments):
     0.8913043478260869
     """
     "*** YOUR CODE HERE ***"
-
+    standerd_score, get_score = 0, 0
+    def options(major, score):
+        nonlocal standerd_score, get_score
+        standerd_score += class_assignments[major] # 直接调用外部 make_glookup 函数的参数来访问字典解决
+        get_score += score
+        return get_score / standerd_score
+    return options
 
 def num_trees(n):
     """How many full binary trees have exactly n leaves? E.g.,
@@ -167,12 +181,23 @@ def num_trees(n):
     2
     >>> num_trees(8)
     429
+    
 
     """
-    if ____________________:
-        return _______________
-    return _______________
+    """
+    # 计算具有 n-1 个叶子节点的满二叉树数量
+    num_trees_n_minus_1 = num_trees(n - 1)
+    
+    # 从具有 n-1 个叶子节点的满二叉树到具有 n 个叶子节点的满二叉树的转换方式
+    conversion_ways = 2 * (2 * n - 3)
+    
+    # 得到确切数量的具有 n 个叶子节点的满二叉树
+    num_trees_n = (num_trees_n_minus_1 * conversion_ways) // n
+    """
 
+    if n == 1 or n == 2:
+        return 1
+    return num_trees(n-1) * 2 * (2*(n-1) + 1)// n - 1
 
 def make_advanced_counter_maker():
     """Makes a function that makes counters that understands the
@@ -203,16 +228,23 @@ def make_advanced_counter_maker():
     >>> tom_counter('global-count')
     1
     """
-    ________________
-
-    def ____________(__________):
-        ________________
-
-        def ____________(__________):
-            ________________
+    global_count =  0
+    def advanced_counter_maker():
+        local_count = 0
+        def advanced_count(count_type):
+            nonlocal global_count, local_count
             "*** YOUR CODE HERE ***"
-            # as many lines as you want
-
-        ________________
-
-    ________________
+            if count_type == "global-count":
+                global_count += 1
+                return global_count
+            elif count_type == "count":
+                local_count += 1
+                return local_count
+            elif count_type == "global-reset":
+                global_count = 0
+            elif count_type == "reset":
+                local_count = 0
+            else:
+                raise TypeError("invalid instruction")
+        return advanced_count
+    return advanced_counter_maker
