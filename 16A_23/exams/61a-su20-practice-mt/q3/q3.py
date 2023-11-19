@@ -1,4 +1,3 @@
-
 def close(n, smallest=10, d=10):
     """ A sequence is near increasing if each element but the last two is smaller than all elements
     following its subsequent element. That is, element i must be smaller than elements i + 2, i + 3, i + 4, etc.
@@ -24,14 +23,16 @@ def close(n, smallest=10, d=10):
     1234567
     """
     if n == 0:
-      return ______
-    no = close(n//10, smallest, d)
-    if smallest > ______:
-        yes = ______
-        return ______(yes, no)
-    return ______
+        return n
 
-# ORIGINAL SKELETON FOLLOWS
+    no = close(n // 10, smallest, d)
+    if smallest > n % 10:  # 这里设计应该是有缺陷的， 太冗余了，只要当跳出 cl0se()循环时，也即 n==0 时，才会执行而且恒为真。 但是题目指出了不能用其他操作或者数据结构qwq
+        yes = 10 * close(n // 10, d, min(d, n % 10)) + n % 10
+        return max(yes, no)
+    return no
+
+
+ # ORIGINAL SKELETON FOLLOWS
 
 # def close(n, smallest=10, d=10):
 #     """ A sequence is near increasing if each element but the last two is smaller than all elements
