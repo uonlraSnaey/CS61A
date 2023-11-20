@@ -5,6 +5,7 @@ def sums(n, k):
     the ways that a list of k positive integers can sum to n. Results can appear in any order.
 
     Return the ways in which K positive integers can sum to N.
+    列出 由 k 位 数，能通过加法得出 n 的所有方法
     >>> sums(2, 2)
     [[1, 1]]
     >>> sums(2, 3)

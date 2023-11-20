@@ -3,6 +3,11 @@
 # show the n elements of the sequence term(1), term(2), . . . , term(n) in order. Assume the term function takes
 # a positive integer argument and returns a positive integer.
 # Important: You may not use pow, **, log, str, or len in your solution.
+"""
+   1、sequence() 解释两个参数 正整数：n, 和一个函数 tern,
+    根据给定的 term 函数生成一个整数，这个整数的每一位列出序列  term (1), term(2)...  按序排列
+    2、term 作为一个函数接受一个正整数作为参数，并返回一个正整数。
+"""
 def sequence(n, term):
     """Return the first n terms of a sequence as an integer.
     >>> sequence(6, abs) # Terms are 1, 2, 3, 4, 5, 6
@@ -13,12 +18,12 @@ def sequence(n, term):
     10100100010000
     """
     t, k = 0, 1
-    while ______:
+    while k <= n:
         m = 1
-        x = ______
+        x = term(k)
         while m <= x:
-            ______
-        t = ______
+            m = m * 10  # 实现整数的首尾相连的加法 ，核心是位数
+        t = t * m + x 
         k = k + 1
     return t
 

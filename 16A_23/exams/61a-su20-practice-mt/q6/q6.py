@@ -20,14 +20,23 @@ def make_zipper(f1, f2, sequence):
     >>> sqincsqinc(2) # square(increment(square(increment(2)))), so 2 -> 3 -> 9 -> 10 -> 100
     100
     """
-    zipper = ______
-    helper = ______
-    while ______:
-        if ______ == 1:
-            zipper = helper(f1, ______)
+    """
+    make_zipper(f1(x), f2(x), zipper sequence)
+    return a function: 等价于 f1(f2(f2(...f1(x)...))) , f1 和 f2 的使用次序由这个数字 决定 
+    举个例子，如果序列是 1211，那意味着返回的函数将相当于 f1(f2(f1(f1(x))))
+    换句话说，这个函数 make_zipper 的任务是基于给定的数字序列，将 f1 和 f2 以特定的顺序组合起来，最终返回一个函数，这个函数对输入 x 进行连续的 f1 和 f2 的嵌套调用。
+
+    """
+    # zipper = x 
+    zipper = lambda x: x
+    helper = lambda f, g: lambda x: f(g(x)) 
+    while sequence:
+        if sequence % 10 == 1:
+            zipper = helper(f1, zipper)
         else:
-            zipper = helper(f2, ______)
-        sequence = ______
+            zipper = helper(f2, zipper)
+
+        sequence = sequence // 10 
     return zipper
 
 # ORIGINAL SKELETON FOLLOWS
