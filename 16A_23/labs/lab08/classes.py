@@ -23,6 +23,9 @@ class Card:
         500
         """
         "*** YOUR CODE HERE ***"
+        self.name = name
+        self.attack = attack
+        self.defense = defense
 
     def power(self, other_card):
         """
@@ -42,13 +45,14 @@ class Card:
         50.0
         """
         "*** YOUR CODE HERE ***"
-
+        power_value = self.attack - other_card.defense / 2
+        return power_value
 
     def effect(self, other_card, player, opponent):
         """
         Cards have no default effect.
         """
-        return
+        return 
 
     def __repr__(self):
         """
@@ -80,6 +84,11 @@ class Player:
         self.deck = deck
         self.name = name
         "*** YOUR CODE HERE ***"
+        #handin_card = []
+        self.hand = []
+        for _ in range(5):
+            self.hand.append(deck.draw())
+
 
     def draw(self):
         """Draw a card from the player's deck and add it to their hand.
@@ -94,6 +103,14 @@ class Player:
         """
         assert not self.deck.is_empty(), 'Deck is empty!'
         "*** YOUR CODE HERE ***"
+        """
+        import random
+        #remove_card = self.handin_card.remove([randint(1,5)])
+        deck_choose_card = random.choice(self.deck)
+        deck_remove_card = self.deck.remove(deck_choose_card)
+        add_hand_card = self.handin_card.append(deck_remove_card)
+        """
+        self.hand.append(self.deck.draw())
 
     def play(self, card_index):
         """Remove and return a card from the player's hand at the given index.
@@ -110,6 +127,8 @@ class Player:
         2
         """
         "*** YOUR CODE HERE ***"
+        remove_card = self.hand.pop(card_index)
+        return remove_card
 
     def display_hand(self):
         """
@@ -150,8 +169,21 @@ class TutorCard(Card):
         True
         """
         "*** YOUR CODE HERE ***"
+        """
+        不需要存从手牌中取出的卡牌
+        remove_card = []
+        for _ in range(3):
+            ele = opponent.hand[0]
+            opponent.hand.remove(ele) # oppend.draw()
+            remove_card.append(ele)
+        """
+        self.other_card = other_card
+        self.player = player
+        opponent.hand = opponent.hand[3:] # 丢
+        for _ in range(3): # 取
+            opponent.draw()
         #Uncomment the line below when you've finished implementing this method!
-        #print('{} discarded and re-drew 3 cards!'.format(opponent.name))
+        print('{} discarded and re-drew 3 cards!'.format(opponent.name))
 
     def copy(self):
         """
@@ -176,6 +208,15 @@ class TACard(Card):
         300
         """
         "*** YOUR CODE HERE ***"
+        """
+        other_card: 该回合对手的选牌
+
+        store = 0
+        store = other_card.defense
+        other_card.defense = other_card.attack
+        other_card.attack = store
+        """
+        other_card.defense, other_card.attack = other_card.attack, other_card.defense
 
     def copy(self):
         """
@@ -206,10 +247,23 @@ class ProfessorCard(Card):
         """
         orig_opponent_deck_length = len(opponent.deck.cards)
         "*** YOUR CODE HERE ***"
+        left_cards = []
+        for card in player.deck.cards:
+            card.attack += other_card.attack
+            card.defense += other_card.defense
+        for card in opponent.deck.cards:
+            # if other_card.defense == card.defense or other_card.attack == card.attack:
+            #     opponent.deck.cards.remove(card) Deck 是一个类， 不能直接对它用deck.remove()
+            if card.defense != other_card.defense or card.attack != other_card.attack:
+                left_cards.append(card)
+
+        opponent.deck.cards = left_cards
+
         discarded = orig_opponent_deck_length - len(opponent.deck.cards)
         if discarded:
+
             #Uncomment the line below when you've finished implementing this method!
-            #print('{} cards were discarded from {}\'s deck!'.format(discarded, opponent.name))
+            print('{} cards were discarded from {}\'s deck!'.format(discarded, opponent.name))
             return
 
     def copy(self):
