@@ -1,4 +1,3 @@
-
 passphrase = '*** PASSPHRASE HERE ***'
 
 
@@ -50,6 +49,39 @@ class VendingMachine:
     'Here is your soda.'
     """
     "*** YOUR CODE HERE ***"
+    def __init__(self, things, price):
+        self.things = things
+        self.price = price
+        self.stock = 0  # 当前货物数量
+        self.balance = 0  # 当前购物（某一件）金额
+
+    def vend(self):
+        # self.stock = stock
+        if self.stock == 0:
+            return "Inventory empty. Restocking required."
+        money = abs(self.price - self.balance)
+        if self.price > self.balance:
+            return f'You must add ${money} more funds.'
+        elif self.price < self.balance:
+            self.stock -= 1  # 商品被买走一份
+            self.balance = 0    # 重置当前购某物金额
+            return f'Here is your {self.things} and ${money} change.'
+        else:
+            self.stock -= 1
+            self.balance = 0
+            return f'Here is your {self.things}.'
+
+    def restock(self, num):
+        self.stock += num
+        return f'Current {self.things} stock: {self.stock}'
+
+    def add_funds(self, a_p):
+        # self.balance += a_p
+        if self.stock == 0: # 当前请求商品无货
+            return f'Inventory empty. Restocking required. Here is your ${a_p}.'
+        else:
+            self.balance += a_p
+            return f'Current balance: ${self.balance}'
 
 
 class Mint:
@@ -88,9 +120,12 @@ class Mint:
 
     def create(self, kind):
         "*** YOUR CODE HERE ***"
+        self.kind = kind
+        return kind(self.year)
 
     def update(self):
         "*** YOUR CODE HERE ***"
+        self.year = Mint.current_year  
 
 class Coin:
     def __init__(self, year):
@@ -98,9 +133,13 @@ class Coin:
 
     def worth(self):
         "*** YOUR CODE HERE ***"
+        age = Mint.current_year - self.year
+        ex_value = max(0, age - 50)
+        return self.cents + ex_value
 
 class Nickel(Coin):
     cents = 5
+
 
 class Dime(Coin):
     cents = 10
@@ -132,7 +171,56 @@ def is_bst(t):
     False
     """
     "*** YOUR CODE HERE ***"
+    # 左侧子树最大值小于节点， 右侧子树最小值大于节点
 
+    # 找出以当前节点 t 为根的子树中的最小值
+    def bst_min(t):
+        if t.is_leaf(): # t 为叶,即最小值
+            return t.label
+        elif len(t.branches) == 1: # 当前只有一个子节点，要判断当前节点和子节点的大小关系
+            # 如果当前节点的值大于其子节点的值，那么最小值在子节点的子树中。递归调用 bst_min() 函数来找到子节点子树中的最小值
+            if t.label > t.branches[0].label: 
+                return bst_min(t.branches[0])   
+            else:
+                # 当前节点的值就是子树中的最小值
+                return t.label
+        else:
+            # 有一个以上的节点,递归在左侧子节点移动，找子树中的到最小值
+            return bst_min(t.branches[0])
+
+    # 当前节点中的子树最大值
+    def bst_max(t):
+        # 为叶（最大值）
+        if t.is_leaf():
+            return t.label
+        # 一个子节点，判断当前节点和其子节点的大小关系
+        elif len(t.branches) == 1:
+            # 小，最大值在子树中，递归调用bst_max()找最大值
+            if t.label < t.branches[0].label:
+                return bst_max(t.branches[0])
+            else:
+                # 大， 最大值为当前节点
+                return t.label
+        else:
+            # 当前有一个以上子节点， 一直在最右侧子树中找最大值。
+            return bst_max(t.branches[1])
+
+    # t 树 本质是叶，即是二叉树
+    if t.is_leaf():
+        return True
+    # 只有一个子 节点（子树）， 递归检查子节点，并确保当前节点值大于等于子节点的最大值（对于左子树），子节小于子节点的最小值（对于右子树）节点，
+    if len(t.branches) == 1:
+        if t.label > t.branches[0].label:
+            return is_bst(t.branches[0]) and t.label >= bst_max(t.branches[0])
+        else:
+            return is_bst(t.branches[0]) and t.label < bst_min(t.branches[0])
+    # 有两个子节点（子树），递归检查左右子树，左子树小于节点，子树大于节点。
+    elif len(t.branches) == 2:
+        left, right = t.branches
+        return is_bst(left) and is_bst(right) and (bst_max(left) <= t.label < bst_min(right))
+    # 都不满足，返回False
+    else:
+        return False
 
 def store_digits(n):
     """Stores the digits of a positive number n in a linked list.
@@ -150,7 +238,18 @@ def store_digits(n):
     >>> print("Do not use str or reversed!") if any([r in cleaned for r in ["str", "reversed"]]) else None
     """
     "*** YOUR CODE HERE ***"
-
+    # first = n % 10
+    # rest = n // 10
+    # 每次在递归调用中，n 的最低位数字都被创建为一个新的节点，并将这个新节点作为链表的头部
+    def helper(lst, n):
+        if n == 0:
+            return lst
+        else:
+            lst = Link(n % 10, lst) 
+            return helper(lst, n//10)
+    
+    re = Link(n%10, Link.empty)
+    return helper(re, n//10)
 
 def path_yielder(t, value):
     """Yields all possible paths from the root of t to a node with the label value
@@ -188,14 +287,16 @@ def path_yielder(t, value):
     """
 
     "*** YOUR CODE HERE ***"
+    # 添加
+    if t.label == value:
+        yield [value]
 
-    for _______________ in _________________:
-        for _______________ in _________________:
-
+    for b in t.branches:
+        for p in path_yielder(b, value):
             "*** YOUR CODE HERE ***"
+            yield [t.label] + p
 
-
-def remove_all(link , value):
+def remove_all(link, value):
     """Remove all the nodes containing value in link. Assume that the
     first element is never removed.
 
@@ -241,6 +342,7 @@ class Tree:
     >>> t.branches[1].is_leaf()
     True
     """
+
     def __init__(self, label, branches=[]):
         for b in branches:
             assert isinstance(b, Tree)
@@ -303,6 +405,7 @@ class Tree:
             for b in t.branches:
                 tree_str += print_tree(b, indent + 1)
             return tree_str
+
         return print_tree(self).rstrip()
 
 
@@ -346,4 +449,3 @@ class Link:
             string += str(self.first) + ' '
             self = self.rest
         return string + str(self.first) + '>'
-
