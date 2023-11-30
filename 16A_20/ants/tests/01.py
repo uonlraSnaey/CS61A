@@ -5,7 +5,7 @@ test = {
     {
       'cases': [
         {
-          'answer': "Placing an ant into the colony will decrease the colony's total available food by that ant's food_cost",
+          'answer': 'b11e19127a1cf83e285f83984cae6d4f',
           'choices': [
             r"""
             Placing an ant into the colony will decrease the colony's total
@@ -21,11 +21,11 @@ test = {
             """
           ],
           'hidden': False,
-          'locked': False,
+          'locked': True,
           'question': 'What is the purpose of the food_cost attribute?'
         },
         {
-          'answer': 'class, all Ants of the same subclass cost the same to deploy',
+          'answer': 'a2025d9f82f64cc8a211c3dbc92f507b',
           'choices': [
             'class, all Ants of the same subclass cost the same to deploy',
             'class, all Ants cost the same to deploy no matter what type of Ant it is',
@@ -33,7 +33,7 @@ test = {
             'instance, the food_cost of an Ant is randomized upon initialization'
           ],
           'hidden': False,
-          'locked': False,
+          'locked': True,
           'question': 'What type of attribute is food_cost?'
         }
       ],
@@ -45,14 +45,17 @@ test = {
         {
           'code': r"""
           >>> Ant.food_cost
-          0
+          73b94a1326ae2e803c3421016112207b
+          # locked
           >>> HarvesterAnt.food_cost
-          2
+          20d533d3e06345c8bd7072212867f2d1
+          # locked
           >>> ThrowerAnt.food_cost
-          3
+          81a7d27d1a4a958871bb97b545b871db
+          # locked
           """,
           'hidden': False,
-          'locked': False
+          'locked': True
         },
         {
           'code': r"""
@@ -68,13 +71,15 @@ test = {
           >>> harvester = HarvesterAnt()
           >>> harvester.action(gamestate)
           >>> gamestate.food
-          5
+          62674984f877ec783f37e8b8b9c264d0
+          # locked
           >>> harvester.action(gamestate)
           >>> gamestate.food
-          6
+          50ae32be3e31df6c59633df7fdfb3a72
+          # locked
           """,
           'hidden': False,
-          'locked': False
+          'locked': True
         }
       ],
       'scored': True,
@@ -91,10 +96,11 @@ test = {
           'code': r"""
           >>> from ants import *
           >>> HarvesterAnt.implemented
-          True
+          c7a88a0ffd3aef026b98eef6e7557da3
+          # locked
           """,
           'hidden': False,
-          'locked': False
+          'locked': True
         }
       ],
       'scored': True,
