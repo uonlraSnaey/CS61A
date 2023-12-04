@@ -107,7 +107,7 @@ class Name(Expr):
         None
         """
         "*** YOUR CODE HERE ***"
-
+        return env.get(self.var_name, None)
     def __str__(self):
         return self.var_name
 
@@ -173,6 +173,13 @@ class CallExpr(Expr):
         Number(14)
         """
         "*** YOUR CODE HERE ***"
+        op = self.operator.eval(env)
+        if op is None:
+            raise NameError(f"{self.operator} is undefined")
+        operands = []
+        for i in self.operands:
+            operands.append(i.eval(env))
+        return op.apply(operands)
 
     def __str__(self):
         function = str(self.operator)
