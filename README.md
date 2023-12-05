@@ -9,5 +9,12 @@ Heigher-order-function、lambda匿名函数（plus版）、Environment Diagrams�
 
 最让我惊喜的是对一些我所熟悉的方法的进一步深入和不同层次、方向的讨论，都说大学是依靠自己，老师只会给你一把麦苗。然后让你自己做出属于自己的金色面包，的确这门课也是这样，但是你所处的这片土地就像东三省的黑土地，给你的肥料也是杠杠的jkl(笑), 言而总之，只要坚持下来终是会有所收获的。
 
+----
+## Useful links
+Course Website (2020 summer)
+
+Textbook (SICP for python)
+
+Online editor (support scheme, SQL and python)
 
 **"故余虽愚，卒获有所闻。"**
