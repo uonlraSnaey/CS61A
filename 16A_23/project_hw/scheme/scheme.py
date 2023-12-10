@@ -36,6 +36,14 @@ def scheme_eval(expr, env, _=None): # Optional third argument is ignored
     else:
         # BEGIN PROBLEM 4
         "*** YOUR CODE HERE ***"
+        op = scheme_eval(first, env)
+        validate_procedure(op)
+        if isinstance(op, MacroProcedure):
+            print("DEBUG: apply_macro", rest, env)
+            return scheme_eval(op.apply_macro(rest, env), env)
+        operands = rest.map(lambda x: scheme_eval(x, env))
+        return scheme_apply(op, operands, env)
+
         # END PROBLEM 4
 
 def self_evaluating(expr):
@@ -68,7 +76,12 @@ def eval_all(expressions, env):
     2
     """
     # BEGIN PROBLEM 7
-    return scheme_eval(expressions.first, env) # change this line
+    if expressions is nil:
+        return None
+    while expressions.rest is not nil:
+        scheme_eval(expressions.first, env)
+        expressions = expressions.rest
+    return scheme_eval(expressions.first, env, True)
     # END PROBLEM 7
 
 ################
@@ -93,14 +106,20 @@ class Frame(object):
         """Define Scheme SYMBOL to have VALUE."""
         # BEGIN PROBLEM 2
         "*** YOUR CODE HERE ***"
+        self.bindings[symbol] = value
         # END PROBLEM 2
 
     def lookup(self, symbol):
         """Return the value bound to SYMBOL. Errors if SYMBOL is not found."""
         # BEGIN PROBLEM 2
         "*** YOUR CODE HERE ***"
-        # END PROBLEM 2
-        raise SchemeError('unknown identifier: {0}'.format(symbol))
+        if self.bindings.get(symbol, None) is not None:
+            return self.bindings[symbol]
+        elif self.parent:
+            return self.parent.lookup(symbol)
+        else:
+            # END PROBLEM 2
+            raise SchemeError('unknown identifier: {0}'.format(symbol))
 
 
     def make_child_frame(self, formals, vals):
@@ -116,6 +135,25 @@ class Frame(object):
         """
         # BEGIN PROBLEM 10
         "*** YOUR CODE HERE ***"
+        '''
+        if len(formals) != len(vals):
+            raise SchemeError("wrong number of argument")
+        else:
+            child_frame = Frame(self)
+            while formals is not nil:
+                child_frame.define(formals.first, vals.first)
+                formals, vals = formals.first, vals.rest
+            return child_frame
+        '''
+        if len(formals) != len(vals):
+            raise SchemeError("wrong number vals are given")
+        else:
+            child_frame = Frame(self)
+            p1, p2 = formals, vals
+            while p1 is not nil:
+                child_frame.define(p1.first, p2.first)
+                p1, p2 = p1.rest, p2.rest
+            return child_frame
         # END PROBLEM 10
 
 ##############
@@ -154,6 +192,16 @@ class BuiltinProcedure(Procedure):
         python_args = []
         # BEGIN PROBLEM 3
         "*** YOUR CODE HERE ***"
+        curr = args
+        while curr is not nil:
+            python_args.append(curr.first)
+            curr = curr.rest
+        if self.use_env:
+            python_args.append(env)
+        try:
+            return self.fn(*python_args)  # 调用了函数 self.fn，传入 python_args 中的参数
+        except TypeError as e:
+            raise SchemeError(f"wrong number of arguments{e}")
         # END PROBLEM 3
 
 class LambdaProcedure(Procedure):
@@ -175,6 +223,7 @@ class LambdaProcedure(Procedure):
         of values, for a lexically-scoped call evaluated in my parent environment."""
         # BEGIN PROBLEM 11
         "*** YOUR CODE HERE ***"
+        return self.env.make_child_frame(self.formals, args)
         # END PROBLEM 11
 
     def __str__(self):
@@ -234,10 +283,18 @@ def do_define_form(expressions, env):
         validate_form(expressions, 2, 2) # Checks that expressions is a list of length exactly 2
         # BEGIN PROBLEM 5
         "*** YOUR CODE HERE ***"
+        env.define(target, scheme_eval(expressions.rest.first, env))
+        return target
         # END PROBLEM 5
     elif isinstance(target, Pair) and scheme_symbolp(target.first):
         # BEGIN PROBLEM 9
         "*** YOUR CODE HERE ***"
+        name = target.first
+        formals = target.rest
+        validate_formals(formals)
+        body = expressions.rest
+        env.define(name, LambdaProcedure(formals, body, env))
+        return name
         # END PROBLEM 9
     else:
         bad_target = target.first if isinstance(target, Pair) else target
@@ -253,6 +310,7 @@ def do_quote_form(expressions, env):
     validate_form(expressions, 1, 1)
     # BEGIN PROBLEM 6
     "*** YOUR CODE HERE ***"
+    return expressions.first
     # END PROBLEM 6
 
 def do_begin_form(expressions, env):
@@ -279,6 +337,7 @@ def do_lambda_form(expressions, env):
     validate_formals(formals)
     # BEGIN PROBLEM 8
     "*** YOUR CODE HERE ***"
+    return LambdaProcedure(formals, expressions.rest, env)
     # END PROBLEM 8
 
 def do_if_form(expressions, env):
@@ -311,6 +370,15 @@ def do_and_form(expressions, env):
     """
     # BEGIN PROBLEM 12
     "*** YOUR CODE HERE ***"
+    if expressions is nil:
+        return True
+    while expressions is not nil:
+        value = scheme_eval(expressions.first, env, True if expressions.rest is nil else False)
+        if is_false_primitive(value):
+            return False
+        expressions = expressions.rest
+
+    return value
     # END PROBLEM 12
 
 def do_or_form(expressions, env):
@@ -328,6 +396,14 @@ def do_or_form(expressions, env):
     """
     # BEGIN PROBLEM 12
     "*** YOUR CODE HERE ***"
+    if expressions is nil:
+        return False
+    while expressions is not nil:
+        value = scheme_eval(expressions.first, env, True if expressions.rest is nil else False)
+        if is_true_primitive(value):
+            return value
+        expressions = expressions.rest
+    return False
     # END PROBLEM 12
 
 def do_cond_form(expressions, env):
@@ -348,6 +424,10 @@ def do_cond_form(expressions, env):
         if is_true_primitive(test):
             # BEGIN PROBLEM 13
             "*** YOUR CODE HERE ***"
+            if clause.rest is nil:
+                return test
+            else:
+                return eval_all(clause.rest, env)
             # END PROBLEM 13
         expressions = expressions.rest
 
@@ -372,6 +452,12 @@ def make_let_frame(bindings, env):
     names, values = nil, nil
     # BEGIN PROBLEM 14
     "*** YOUR CODE HERE ***"
+    while bindings is not nil:
+        binding = bindings.first
+        validate_form(binding, 2, 2)
+        names, values = Pair(binding.first, names), Pair(scheme_eval(binding.rest.first, env), values)
+        bindings = bindings.rest
+    validate_formals(names)
     # END PROBLEM 14
     return env.make_child_frame(names, values)
 
@@ -498,6 +584,8 @@ class MuProcedure(Procedure):
 
     # BEGIN PROBLEM 15
     "*** YOUR CODE HERE ***"
+    def make_call_frame(self, args, env):
+        return env.make_child_frame(self.formals, args)
     # END PROBLEM 15
 
     def __str__(self):
@@ -512,9 +600,11 @@ def do_mu_form(expressions, env):
     validate_form(expressions, 2)
     formals = expressions.first
     validate_formals(formals)
-    # BEGIN PROBLEM 18
+    # BEGIN PROBLEM 15
     "*** YOUR CODE HERE ***"
-    # END PROBLEM 18
+    # chao!
+    return MuProcedure(formals, expressions.rest)
+    # END PROBLEM 15
 
 SPECIAL_FORMS['mu'] = do_mu_form
 
