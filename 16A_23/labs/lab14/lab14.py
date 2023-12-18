@@ -15,7 +15,13 @@ def prune_min(t):
     Tree(6, [Tree(3, [Tree(1)])])
     """
     "*** YOUR CODE HERE ***"
-
+    if t.is_leaf():
+        return
+    if t.branches[0].label < t.branches[1].label:
+        t.branches = [t.branches[0]]
+    else:
+        t.branches = [t.branches[1]]
+    prune_min(t.branches[0])
 
 def align_skeleton(skeleton, code):
     """
@@ -51,31 +57,32 @@ def align_skeleton(skeleton, code):
             cost: the cost of the corrections, in edits
         """
         if skeleton_idx == len(skeleton) and code_idx == len(code):
-            return _________, ______________
+            return ("", 0)
         if skeleton_idx < len(skeleton) and code_idx == len(code):
             edits = "".join(["-[" + c + "]" for c in skeleton[skeleton_idx:]])
-            return _________, ______________
+            return (edits, len(skeleton) - skeleton_idx)
         if skeleton_idx == len(skeleton) and code_idx < len(code):
             edits = "".join(["+[" + c + "]" for c in code[code_idx:]])
-            return _________, ______________
-        
+            return (edits, len(code) - code_idx)
+
         possibilities = []
         skel_char, code_char = skeleton[skeleton_idx], code[code_idx]
         # Match
         if skel_char == code_char:
-            _________________________________________
-            _________________________________________
-            possibilities.append((_______, ______))
+            edits, cost = helper_align(skeleton_idx + 1, code_idx + 1)
+            possibilities.append((skeleton[skeleton_idx] + edits, cost))
+
         # Insert
-        _________________________________________
-        _________________________________________
-        possibilities.append((_______, ______))
+        edits, cost = helper_align(skeleton_idx, code_idx + 1)
+        prefix = "+[" + code[code_idx] + "]"
+        possibilities.append((prefix + edits, cost + 1))
         # Delete
-        _________________________________________
-        _________________________________________
-        possibilities.append((_______, ______))
+        edits, cost = helper_align(skeleton_idx + 1, code_idx)
+        prefix = "-[" + skeleton[skeleton_idx] + "]"
+        possibilities.append((prefix + edits, cost + 1))
         return min(possibilities, key=lambda x: x[1])
-    result, cost = ________________________
+
+    result, cost = helper_align(0, 0)
     return result
 
 
@@ -93,7 +100,19 @@ def num_splits(s, d):
     12
     """
     "*** YOUR CODE HERE ***"
-
+    l = len(s)
+    total = 0
+    def helper(first, second, index):
+        nonlocal total
+        if index == l:
+            if abs(first - second) <= d:
+                total += 1
+            return
+        else:
+            helper(first + s[index], second, index + 1)
+            helper(first, second + s[index], index + 1)
+    helper(0, 0, 0)
+    return total//2
 
 def insert(link, value, index):
     """Insert a value into a Link at the given index.
@@ -110,14 +129,14 @@ def insert(link, value, index):
     >>> insert(link, 4, 5)
     IndexError
     """
-    if ____________________:
-        ____________________
-        ____________________
-        ____________________
-    elif ____________________:
-        ____________________
+    if index == 0:
+        tmp = Link(link.first, link.rest)
+        link.first = value
+        link.rest = tmp
+    elif link.rest is Link.empty:
+        raise IndexError('Index out of range')
     else:
-        ____________________
+        insert(link.rest, value, index - 1)
 
 
 
